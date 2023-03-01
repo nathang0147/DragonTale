@@ -2,8 +2,7 @@ package src.Main;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import src.GameState.GameStateManager;
 public class GamePanel extends JPanel
@@ -16,7 +15,7 @@ public class GamePanel extends JPanel
 
     //Thread
     private Thread thread;
-    private boolean running = false;
+    private boolean running;
     private int FPS = 60;
     private long targetTime = 1000/FPS;
 
@@ -36,7 +35,7 @@ public class GamePanel extends JPanel
     }
 
     public void addNotify(){
-        addNotify();
+        super.addNotify();
         if(thread == null){
             thread = new Thread(this);
             addKeyListener(this);
@@ -44,15 +43,18 @@ public class GamePanel extends JPanel
         }
     }
 
-    public void init(){
-        image = new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
-        g = (Graphics2D) g;
+    private void init(){
+        image = new BufferedImage(
+                WIDTH,HEIGHT,
+                BufferedImage.TYPE_INT_RGB);
+
+        g = (Graphics2D) image.getGraphics();
         running = true;
 
         gsm = new GameStateManager();
     }
 
-    @Override
+
     public void run() {
         init();
         long start;
@@ -68,6 +70,7 @@ public class GamePanel extends JPanel
             elaspe = System.nanoTime() - start;
 
             wait = targetTime - elaspe/1000000;
+            if (wait < 0) wait = 5;
             try {
                 Thread.sleep(wait);
             }catch (Exception e){
@@ -76,28 +79,22 @@ public class GamePanel extends JPanel
         }
     }
 
-    public void update(){
+    private void update(){
         gsm.update();
     }
-    public void draw(){
+    private void draw(){
         gsm.draw(g);
     }
-    public void drawToScreen(){
+    private void drawToScreen(){
         Graphics g2 = getGraphics();
-        g2.drawImage(image,0,0,null);
+        g2.drawImage(image,0,0,WIDTH*SCALE,HEIGHT*SCALE,null);
         g2.dispose();
     }
-    @Override
-    public void keyTyped(KeyEvent e) {
 
-    }
-
-    @Override
+    public void keyTyped(KeyEvent e) {}
     public void keyPressed(KeyEvent e) {
         gsm.keyPressed(e.getKeyCode());
     }
-
-    @Override
     public void keyReleased(KeyEvent e) {
         gsm.keyReleased(e.getKeyCode());
     }

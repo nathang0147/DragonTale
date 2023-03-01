@@ -4,8 +4,7 @@ import src.Main.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import src.Main.GamePanel;
+import java.awt.image.*;
 
 public class Background {
     private BufferedImage image;
@@ -18,7 +17,7 @@ public class Background {
     public Background(String s, double ms){
         try{
             image = ImageIO.read(
-                    getClass().getResourceAsStream(s)
+                    getClass().getClassLoader().getResourceAsStream(s)
             );
             moveScale = ms;
         }catch (Exception e){
@@ -45,13 +44,9 @@ public class Background {
         if(x < 0){
             g.drawImage(image,(int) x + GamePanel.WIDTH,(int) y,null);
 
-        } else if (x > 0) {
-            g.drawImage(image,(int) x - GamePanel.WIDTH,(int) y,null);
         }
-        if (y<0) {
-            g.drawImage(image,(int) x,(int) y + GamePanel.HEIGHT,null);
-        } else if (y>0) {
-
+        if (x > 0) {
+            g.drawImage(image,(int) x - GamePanel.WIDTH,(int) y,null);
         }
     }
 }

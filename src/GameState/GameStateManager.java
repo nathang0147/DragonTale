@@ -5,8 +5,8 @@ import java.util.ArrayList;
 public class GameStateManager {
     private ArrayList<GameState>gameStates;
     private static int current;
-    private static final int MENUSTATE = 0;
-    private static final int LEVEL1STATE = 1;
+    public static final int MENUSTATE = 0;
+    public static final int LEVEL1STATE = 1;
     public GameStateManager(){
         gameStates = new ArrayList<GameState>();
         current = MENUSTATE;
@@ -28,7 +28,6 @@ public class GameStateManager {
         gameStates.get(current).keyPressed(k);
     }
 
-    public void keyReleased(int k){
-        gameStates.get(current).keyReleased(k);
+    public void keyReleased(int k){gameStates.get(current).keyReleased(k);
     }
 }
